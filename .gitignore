@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+# Txt files
+Altland-Zirnbauer/Data_Analysis/.ipynb_checkpoints
+Altland-Zirnbauer/Data_Analysis/Channel/*.txt
