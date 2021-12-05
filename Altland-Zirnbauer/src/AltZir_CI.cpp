@@ -120,11 +120,11 @@ void AltZir_CI::Create_H(MatrixXcd* H_pointer, int ress, double _lambda){
 	H_1_aux.setZero(); H_3_aux.setZero();
 
 	for (int i = 1; i < ress + 1; i++){
-		H_1_aux(i-1,i-1) = (_lambda*(1/2*sqrt(ress)))*B(i-1,i-1);
-		H_3_aux(i-1,i-1) = (_lambda*(1/2*sqrt(ress)))*D(i-1,i-1);
+		H_1_aux(i-1,i-1) = (_lambda*(1/sqrt(ress)))*B(i-1,i-1);
+		H_3_aux(i-1,i-1) = (_lambda*(1/sqrt(ress)))*D(i-1,i-1);
 		for(int j = i + 1; j < ress + 1; j++){
-			H_1_aux(i-1,j-1) = (_lambda*(1/(sqrt(ress))))*B(j-1,i-1);
-			H_3_aux(i-1,j-1) = (_lambda*(1/(sqrt(ress))))*D(j-1,i-1);
+			H_1_aux(i-1,j-1) = (_lambda*(sqrt(2)/(sqrt(ress))))*B(j-1,i-1);
+			H_3_aux(i-1,j-1) = (_lambda*(sqrt(2)/(sqrt(ress))))*D(j-1,i-1);
 		}
 	}
 	
