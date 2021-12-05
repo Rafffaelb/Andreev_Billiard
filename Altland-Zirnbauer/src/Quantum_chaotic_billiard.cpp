@@ -9,6 +9,7 @@
 #include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/QR>
 #include "../include/Quantum_chaotic_billiard.h"
+#include "../include/Auxiliary_Functions.h"
 #define PI 3.14159265
 
 using namespace std;
@@ -50,6 +51,15 @@ void Quantum_chaotic_billiard::Calculate_Smatrix(){
 	MatrixXcd S(_W.cols(), _W.cols());
 
 	S << identityS - number_2*complex_identity*M_PI*(_W.adjoint())*D_inv_W;
+
+//	MatrixXcd paulimatrix_y(2,2);
+	
+//	paulimatrix_y << 0, -complex_identity,
+		         complex_identity, 0;
+
+//	cout << "\nParticle-Hole symmetry constraint: \n" << (S-Kronecker_Product(MatrixXcd::Identity(n,n), paulimatrix_y)*S.conjugate()*Kronecker_Product(MatrixXcd::Identity(n,n), paulimatrix_y)).cwiseAbs() << endl;
+
+//	cout << "\nTime-reversal symmetry constraint: (Only CI class) \n" << (S-S.transpose()).cwiseAbs() << endl;
 
 	this -> _S = S;
 }

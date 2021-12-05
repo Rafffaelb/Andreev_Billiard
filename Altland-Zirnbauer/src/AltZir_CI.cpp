@@ -38,7 +38,7 @@ void AltZir_CI::Create_W(MatrixXcd* W_pointer, int ress, int N1, int N2, double 
 
 	for (int j=1; j < ress+1; j++ ){
 		for (int k=1; k < 2*N2+1; k++){
-			std::complex<double> aux(y*(sqrt(((2.0*lambda))/(M_PI*(ress+1)))*sin(j*(k+N1)*M_PI/(ress+1))), 0);
+			std::complex<double> aux(y*(sqrt(((2.0*lambda))/(M_PI*(ress+1)))*sin(j*(k+2*N1)*M_PI/(ress+1))), 0);
 			W2(j-1,k-1) = aux;
 		}
 	}
@@ -86,7 +86,11 @@ void AltZir_CI::Create_H(MatrixXcd* H_pointer, int ress, double _lambda){
 
 	complex<double> complex_identity(0,1);
 
+	MatrixXcd paulimatrix_x(2,2);
 	MatrixXcd paulimatrix_z(2,2);
+
+	paulimatrix_x << 0, 1,
+		         1, 0;
 
 	paulimatrix_z << 1, 0,
 		      	 0, -1;
@@ -95,34 +99,44 @@ void AltZir_CI::Create_H(MatrixXcd* H_pointer, int ress, double _lambda){
 	std::normal_distribution<double> distribution(0.0, 1.0);
 	std::default_random_engine generator(seed);
 
-	MatrixXcd A(ress, ress);
-	A.setZero();
+	MatrixXcd B(ress, ress); MatrixXcd D(ress, ress);
+	B.setZero(); D.setZero();
 
 	for (int i = 1; i < ress + 1; i++){
 		for (int j = 1; j < ress + 1; j++){
 			double aux = distribution(generator);
-			A(i-1,j-1) = aux;
+			B(i-1,j-1) = aux;
 		}
 	}
 
-	MatrixXcd H_3_aux(ress, ress);
-	H_3_aux.setZero();
+	for (int i = 1; i < ress + 1; i++){
+		for (int j = 1; j < ress + 1; j++){
+			double aux = distribution(generator);
+			D(i-1,j-1) = aux;
+		}
+	}
+
+	MatrixXcd H_1_aux(ress, ress); MatrixXcd H_3_aux(ress, ress);
+	H_1_aux.setZero(); H_3_aux.setZero();
 
 	for (int i = 1; i < ress + 1; i++){
-		H_3_aux(i-1,i-1) = (_lambda*(1/2*sqrt(ress)))*A(i-1,i-1);
+		H_1_aux(i-1,i-1) = (_lambda*(1/2*sqrt(ress)))*B(i-1,i-1);
+		H_3_aux(i-1,i-1) = (_lambda*(1/2*sqrt(ress)))*D(i-1,i-1);
 		for(int j = i + 1; j < ress + 1; j++){
-			H_3_aux(i-1,j-1) = (_lambda*(1/(sqrt(ress))))*A(j-1,i-1);
+			H_1_aux(i-1,j-1) = (_lambda*(1/(sqrt(ress))))*B(j-1,i-1);
+			H_3_aux(i-1,j-1) = (_lambda*(1/(sqrt(ress))))*D(j-1,i-1);
 		}
 	}
 	
-	MatrixXcd H_3(ress, ress);
+	MatrixXcd H_1(ress,ress); MatrixXcd H_3(ress, ress);
 
+	H_1 << H_1_aux + H_1_aux.transpose();
 	H_3 << H_3_aux + H_3_aux.transpose();
 
 	MatrixXcd H(_electron_hole_deg * _spin_deg * ress, _electron_hole_deg * _spin_deg * ress);
 	H.setZero();
 
-	H << -Kronecker_Product(paulimatrix_z, H_3);
+	H << Kronecker_Product(paulimatrix_x, H_1) + Kronecker_Product(paulimatrix_z, H_3);
 	*H_pointer = H;	
 }
 
