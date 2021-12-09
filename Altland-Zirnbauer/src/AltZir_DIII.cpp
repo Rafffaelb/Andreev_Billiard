@@ -122,8 +122,8 @@ void AltZir_DIII::Create_H(MatrixXcd* H_pointer, int ress, double _lambda){
 		H1_aux(i-1,i-1) = 0;
 		H3_aux(i-1,i-1) = 0;
 		for (int j = i + 1; j < ress + 1; j++){
-			H1_aux(i-1,j-1) = A(i-1,j-1)*(_lambda*(1/sqrt(2*ress)));
-			H3_aux(i-1,j-1) = A(j-1,i-1)*(_lambda*(1/sqrt(2*ress)));
+			H1_aux(i-1,j-1) = A(i-1,j-1)*(_lambda*(1/(sqrt(2*ress))));
+			H3_aux(i-1,j-1) = A(j-1,i-1)*(_lambda*(1/(sqrt(2*ress))));
 		}
 	}
 

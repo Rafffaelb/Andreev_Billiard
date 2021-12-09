@@ -146,14 +146,14 @@ void AltZir_C::Create_H(MatrixXcd* H_pointer, int ress, double _lambda){
 
 	for (int i = 1; i < ress + 1; i++){
 		H_0_aux(i-1,i-1) = 0;
-		H_1_aux(i-1,i-1) = (_lambda*(sqrt(3)/sqrt(4*ress)))*B(i-1,i-1);
-		H_2_aux(i-1,i-1) = (_lambda*(sqrt(3)/sqrt(4*ress)))*C(i-1,i-1);
-		H_3_aux(i-1,i-1) = (_lambda*(sqrt(3)/sqrt(4*ress)))*D(i-1,i-1);
+		H_1_aux(i-1,i-1) = (_lambda*(sqrt(2)/sqrt(3*ress)))*B(i-1,i-1);
+		H_2_aux(i-1,i-1) = (_lambda*(sqrt(2)/sqrt(3*ress)))*C(i-1,i-1);
+		H_3_aux(i-1,i-1) = (_lambda*(sqrt(2)/sqrt(3*ress)))*D(i-1,i-1);
 		for(int j = i + 1; j < ress + 1; j++){
-			H_0_aux(i-1,j-1) = (_lambda*(sqrt(2)/(sqrt(ress))))*A(i-1,j-1);
-			H_1_aux(i-1,j-1) = (_lambda*(sqrt(2)/(sqrt(ress))))*B(i-1,j-1);
-			H_2_aux(i-1,j-1) = (_lambda*(sqrt(2)/(sqrt(ress))))*C(i-1,j-1);
-			H_3_aux(i-1,j-1) = (_lambda*(sqrt(2)/(sqrt(ress))))*D(j-1,i-1);
+			H_0_aux(i-1,j-1) = (_lambda*(1/(sqrt(ress))))*A(i-1,j-1);
+			H_1_aux(i-1,j-1) = (_lambda*(1/(sqrt(ress))))*B(i-1,j-1);
+			H_2_aux(i-1,j-1) = (_lambda*(1/(sqrt(ress))))*C(i-1,j-1);
+			H_3_aux(i-1,j-1) = (_lambda*(1/(sqrt(ress))))*D(j-1,i-1);
 		}
 	}
 	
