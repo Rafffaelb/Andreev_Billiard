@@ -23,33 +23,41 @@ AltZir_C::~AltZir_C() {}
 
 void AltZir_C::Create_W(MatrixXcd* W_pointer, int ress, int N1, int N2, double lambda, double y){
 
-	MatrixXcd W1(ress, _electron_hole_deg * N1);
+	MatrixXcd W1(ress, N1);
 	W1.setZero();
 
 	for (int j=1; j < ress+1; j++ ){
-		for (int k=1; k < 2*N1+1; k++){
+		for (int k=1; k < N1+1; k++){
 			std::complex<double> aux(y*(sqrt(((2.0*lambda))/(M_PI*(ress+1)))*sin(j*k*M_PI/(ress+1))), 0);
 			W1(j-1,k-1) = aux;
 		}
 	}
 
-	MatrixXcd W2(ress, _electron_hole_deg * N2);
+	MatrixXcd W2(ress, N2);
 	W2.setZero();
 
 	for (int j=1; j < ress+1; j++ ){
-		for (int k=1; k < 2*N2+1; k++){
+		for (int k=1; k < N2+1; k++){
 			std::complex<double> aux(y*(sqrt(((2.0*lambda))/(M_PI*(ress+1)))*sin(j*(k+2*N1)*M_PI/(ress+1))), 0);
 			W2(j-1,k-1) = aux;
 		}
 	}
 
+//	MatrixXcd W1_new(_electron_hole_deg * ress, _electron_hole_deg * N1);
+//	W1_new.setZero();
+//	W1_new << Implementing_Superconducting_Symmetry_W(W1, N1, ress, _electron_hole_deg);
+
+//	MatrixXcd W2_new(_electron_hole_deg * ress, _electron_hole_deg * N2);
+//	W2_new.setZero();
+//	W2_new << Implementing_Superconducting_Symmetry_W(W2, N2, ress, _electron_hole_deg);
+
 	MatrixXcd W1_new(_electron_hole_deg * ress, _electron_hole_deg * N1);
 	W1_new.setZero();
-	W1_new << Implementing_Superconducting_Symmetry_W(W1, N1, ress, _electron_hole_deg);
+	W1_new << Kronecker_Product(W1, MatrixXcd::Identity(2,2));
 
 	MatrixXcd W2_new(_electron_hole_deg * ress, _electron_hole_deg * N2);
 	W2_new.setZero();
-	W2_new << Implementing_Superconducting_Symmetry_W(W2, N2, ress, _electron_hole_deg);
+	W2_new << Kronecker_Product(W2, MatrixXcd::Identity(2,2));
 
 	MatrixXcd W(_electron_hole_deg * ress, _electron_hole_deg * (N1+N2));
 	W << W1_new, W2_new;
@@ -118,21 +126,21 @@ void AltZir_C::Create_H(MatrixXcd* H_pointer, int ress, double _lambda){
 	}
 
 	for (int i = 1; i < ress + 1; i++){
-		for (int j = i; j < ress + 1; j++){
+		for (int j = 1; j < ress + 1; j++){
 			double aux = distribution(generator);
 			B(i-1,j-1) = aux;
 		}
 	}
 
 	for (int i = 1; i < ress + 1; i++){
-		for (int j = i; j < ress + 1; j++){
+		for (int j = 1; j < ress + 1; j++){
 			double aux = distribution(generator);
 			C(i-1,j-1) = aux;
 		}
 	}
 
 	for (int i = 1; i < ress + 1; i++){
-		for (int j = i; j < ress + 1; j++){
+		for (int j = 1; j < ress + 1; j++){
 			double aux = distribution(generator);
 			D(i-1,j-1) = aux;
 		}
@@ -146,19 +154,22 @@ void AltZir_C::Create_H(MatrixXcd* H_pointer, int ress, double _lambda){
 
 	for (int i = 1; i < ress + 1; i++){
 		H_0_aux(i-1,i-1) = 0;
-		H_1_aux(i-1,i-1) = (_lambda*(sqrt(2)/sqrt(3*ress)))*B(i-1,i-1);
-		H_2_aux(i-1,i-1) = (_lambda*(sqrt(2)/sqrt(3*ress)))*C(i-1,i-1);
-		H_3_aux(i-1,i-1) = (_lambda*(sqrt(2)/sqrt(3*ress)))*D(i-1,i-1);
+		H_1_aux(i-1,i-1) = (_lambda*(1/sqrt(3*ress)))*B(i-1,i-1);
+		H_2_aux(i-1,i-1) = (_lambda*(1/sqrt(3*ress)))*C(i-1,i-1);
+		H_3_aux(i-1,i-1) = (_lambda*(1/sqrt(3*ress)))*D(i-1,i-1);
 		for(int j = i + 1; j < ress + 1; j++){
-			H_0_aux(i-1,j-1) = (_lambda*(1/(sqrt(ress))))*A(i-1,j-1);
-			H_1_aux(i-1,j-1) = (_lambda*(1/(sqrt(ress))))*B(i-1,j-1);
-			H_2_aux(i-1,j-1) = (_lambda*(1/(sqrt(ress))))*C(i-1,j-1);
-			H_3_aux(i-1,j-1) = (_lambda*(1/(sqrt(ress))))*D(j-1,i-1);
+			H_0_aux(i-1,j-1) = (_lambda*(1/(sqrt(3*ress))))*A(i-1,j-1);
+			H_1_aux(i-1,j-1) = (_lambda*(1/(sqrt(3*ress))))*B(i-1,j-1);
+			H_2_aux(i-1,j-1) = (_lambda*(1/(sqrt(3*ress))))*C(i-1,j-1);
+			H_3_aux(i-1,j-1) = (_lambda*(1/(sqrt(3*ress))))*D(i-1,j-1);
 		}
 	}
 	
 	MatrixXcd H_0(ress, ress); MatrixXcd H_1(ress, ress);
        	MatrixXcd H_2(ress, ress); MatrixXcd H_3(ress, ress);
+
+	H_0.setZero(); H_1.setZero();
+	H_2.setZero(); H_3.setZero();
 
 	H_0 << H_0_aux - H_0_aux.transpose();
 	H_1 << H_1_aux + H_1_aux.transpose();
@@ -169,7 +180,7 @@ void AltZir_C::Create_H(MatrixXcd* H_pointer, int ress, double _lambda){
 	MatrixXcd H(_electron_hole_deg * _spin_deg * ress, _electron_hole_deg * _spin_deg * ress);
 	H.setZero();
 
-	H << complex_identity*Kronecker_Product(MatrixXcd::Identity(_electron_hole_deg, _electron_hole_deg), H_0) + (Kronecker_Product(paulimatrix_x, H_1) + Kronecker_Product(paulimatrix_y, H_2) + Kronecker_Product(paulimatrix_z, H_3));
+	H << complex_identity*Kronecker_Product(H_0, MatrixXcd::Identity(_electron_hole_deg, _electron_hole_deg)) + (Kronecker_Product(H_1, paulimatrix_x) + Kronecker_Product(H_2, paulimatrix_y) + Kronecker_Product(H_3, paulimatrix_z));
 	*H_pointer = H;	
 }
 
