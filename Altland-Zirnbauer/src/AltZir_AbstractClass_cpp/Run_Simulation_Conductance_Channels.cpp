@@ -16,7 +16,7 @@ void AltZir::Run_Simulation_Conductance_Channels(){
 	double Gamma, y, V;
        	int ress;
 
-	ress = 200;
+	ress = 100;
 
 	Gamma = 1;
 	y = sqrt(1.0/Gamma)*(1.0-sqrt(1.0-Gamma));
