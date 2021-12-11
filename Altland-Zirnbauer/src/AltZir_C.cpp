@@ -23,26 +23,26 @@ AltZir_C::~AltZir_C() {}
 
 void AltZir_C::Create_W(MatrixXcd* W_pointer, int ress, int N1, int N2, double lambda, double y){
 
-	MatrixXcd W1(ress, N1);
-	W1.setZero();
+	MatrixXcd W1(ress,N1);
+	MatrixXcd W2(ress,N2);
+
+	W1.setZero(); W2.setZero();
 
 	for (int j=1; j < ress+1; j++ ){
 		for (int k=1; k < N1+1; k++){
 			if (j == k){
 				std::complex<double> aux(y*sqrt(lambda/M_PI), 0);
-				W1(j-1, k-1) = aux;
+				W1(j-1,k-1) = aux;
 			}
 		}
 	}
 
-	MatrixXcd W2(ress, N2);
-	W2.setZero();
-
 	for (int j=1; j < ress+1; j++ ){
 		for (int k=1; k < N2+1; k++){
-			if (j == k){
+			if (j==k){
 				std::complex<double> aux(y*sqrt(lambda/M_PI), 0);
 				W2(j+N1-1,k-1) = aux;
+		
 			}
 		}
 	}
@@ -51,9 +51,11 @@ void AltZir_C::Create_W(MatrixXcd* W_pointer, int ress, int N1, int N2, double l
 	W_aux.setZero();
 	W_aux << W1, W2;
 
-	MatrixXcd W(_electron_hole_deg * ress, _electron_hole_deg * (N1+N2));
+	MatrixXcd W(2*ress, 2*(N1+N2));
 	W.setZero();
+
 	W << Kronecker_Product(W_aux, MatrixXcd::Identity(2,2));
+
 	*W_pointer = W;
 }
 
