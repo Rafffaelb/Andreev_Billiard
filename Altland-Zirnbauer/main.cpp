@@ -34,6 +34,13 @@ int main(int argc, char **argv){
 
 					altzir_d.Run_Simulation_Conductance_Channels();
 				}
+
+				if (strcmp(argv[j],"Gamma") == 0){
+					
+					cout << "\n ##### Running Class D Altland-Zirnbauer Ensemble (variable: Gamma) #### \n" << endl;
+
+					altzir_d.Run_Simulation_Conductance_Gamma();
+				}
 			}
 			altzir_d.~AltZir_D();
 		}
@@ -53,6 +60,13 @@ int main(int argc, char **argv){
 						
 						altzir_diii.Run_Simulation_Conductance_Channels();
 					}
+
+					if (strcmp(argv[j],"Gamma") == 0){
+						
+						cout << "\n ##### Running Class DIII Altland-Zirnbauer Ensemble (variable: Gamma) #### \n" << endl;
+
+						altzir_diii.Run_Simulation_Conductance_Gamma();
+					}
 				}
 				altzir_diii.~AltZir_DIII();	
 			}
@@ -70,9 +84,16 @@ int main(int argc, char **argv){
 						if (strcmp(argv[j],"Channel") == 0){
 				
 							cout << "\n ###### Running Class C Altland-Zirnbauer Ensemble (variable: Channel) ##### \n" << endl;
-						
 							altzir_c.Run_Simulation_Conductance_Channels();
 						}
+
+						if (strcmp(argv[j],"Gamma") == 0){
+					
+							cout << "\n ##### Running Class C Altland-Zirnbauer Ensemble (variable: Gamma) #### \n" << endl;
+
+							altzir_c.Run_Simulation_Conductance_Gamma();
+						}
+
 					}
 					altzir_c.~AltZir_C();
 				}
@@ -90,8 +111,13 @@ int main(int argc, char **argv){
 							if (strcmp(argv[j],"Channel") == 0){
 				
 								cout << "\n ###### Running Class CI Altland-Zirnbauer Ensemble (variable: Channel) ##### \n" << endl;
-						
 								altzir_ci.Run_Simulation_Conductance_Channels();
+							}
+
+							if (strcmp(argv[j],"Gamma") == 0){
+					
+								cout << "\n ##### Running Class CI Altland-Zirnbauer Ensemble (variable: Gamma) #### \n" << endl;
+								altzir_ci.Run_Simulation_Conductance_Gamma();
 							}
 						}
 						altzir_ci.~AltZir_CI();	

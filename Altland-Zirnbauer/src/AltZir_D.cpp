@@ -129,3 +129,22 @@ void AltZir_D::Save_txt_files_Channels(MatrixXcd G, MatrixXcd P, int num_steps){
 		}
 	}
 }
+
+void AltZir_D::Save_txt_files_Gamma(MatrixXcd G, MatrixXcd P, int num_steps, int N1){
+
+	std::ofstream output_G("Data_Analysis/Gamma/Andreev_G_D_Gamma_N"+to_string(N1)+".txt");
+	std::ofstream output_P("Data_Analysis/Gamma/Andreev_P_D_Gamma_N"+to_string(N1)+".txt");
+
+	for(int i = 0; i < num_steps; i++){
+		for (int j = 0; j < 21; j++){
+			if (j == 20){
+				output_G << G(i,j).real() << std::endl;
+				output_P << P(i,j).real() << std::endl;
+			}
+			else{
+				output_G << G(i,j).real() << "\t";
+				output_P << P(i,j).real() << "\t";
+			}
+		}
+	}	
+}

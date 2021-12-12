@@ -17,5 +17,6 @@ class AltZir_C: public AltZir{
 		void Create_H(MatrixXcd* H_pointer, int _ress, double _lambda);
 
 		void Save_txt_files_Channels(MatrixXcd G, MatrixXcd P, int num_steps);
+		void Save_txt_files_Gamma(MatrixXcd G, MatrixXcd P, int num_steps, int N1);
 };
 #endif
