@@ -17,27 +17,3 @@ MatrixXcd Kronecker_Product(MatrixXcd A, MatrixXcd B){
 
 	return C;
 }
-
-MatrixXcd Implementing_Superconducting_Symmetry_W(MatrixXcd W_aux, int N, int ress, int _electron_hole_deg){
-
-	MatrixXcd Waux_A(ress, 1); MatrixXcd Waux_B(ress, 1);
-	Waux_A.setZero(); Waux_B.setZero();
-
-	MatrixXcd Waux_new(_electron_hole_deg * ress, 2);
-	Waux_new.setZero();
-
-	MatrixXcd W_new(_electron_hole_deg * ress, _electron_hole_deg * N);
-	W_new.setZero();
-
-	for (int k=1; k < W_aux.cols(); k += 2){
-		Waux_A = W_aux.block(0, k-1, ress, 1);
-		Waux_B = W_aux.block(0, k, ress, 1);	
-	
-		Waux_new.block(0,0, ress, 1) = Waux_A; Waux_new.block(0, 1, ress, 1) = Waux_B;
-		Waux_new.block(ress, 0, ress, 1) = -Waux_B; Waux_new.block(ress, 1, ress, 1) = Waux_A;
-
-		W_new.block(0, (k-1), _electron_hole_deg * ress, 2) = Waux_new;
-	}
-
-	return W_new;
-}
