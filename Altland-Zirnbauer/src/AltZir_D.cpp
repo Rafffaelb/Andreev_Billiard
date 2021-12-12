@@ -22,25 +22,33 @@ AltZir_D::~AltZir_D() {}
 
 void AltZir_D::Create_W(MatrixXcd* W_pointer, int ress, int N1, int N2, double lambda, double y){
 
-	MatrixXcd W1(ress,N1);
-	MatrixXcd W2(ress,N2);
-	MatrixXcd W(ress,N1+N2);
+	MatrixXcd W1(ress,N1); MatrixXcd W2(ress,N2);
+
+	W1.setZero(); W2.setZero();
 
 	for (int j=1; j < ress+1; j++ ){
 		for (int k=1; k < N1+1; k++){
-			std::complex<double> aux(y*(sqrt(((2.0*lambda))/(M_PI*(ress+1)))*sin(j*k*M_PI/(ress+1))), 0);
-			W1(j-1,k-1) = aux;
+			if (j == k){
+				std::complex<double> aux(y*sqrt(lambda/M_PI), 0);
+				W1(j-1,k-1) = aux;
+			}
 		}
 	}
 
 	for (int j=1; j < ress+1; j++ ){
 		for (int k=1; k < N2+1; k++){
-			std::complex<double> aux(y*(sqrt(((2.0*lambda))/(M_PI*(ress+1)))*sin(j*(k+N1)*M_PI/(ress+1))), 0);
-			W2(j-1,k-1) = aux;
+			if (j==k){
+				std::complex<double> aux(y*sqrt(lambda/M_PI), 0);
+				W2(j+N1-1,k-1) = aux;
+		
+			}
 		}
 	}
 
+	MatrixXcd W(ress, (N1+N2));
+	W.setZero();
 	W << W1, W2;
+
 	*W_pointer = W;
 }
 

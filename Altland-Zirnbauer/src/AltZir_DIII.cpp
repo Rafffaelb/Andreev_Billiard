@@ -23,38 +23,39 @@ AltZir_DIII::~AltZir_DIII() {}
 
 void AltZir_DIII::Create_W(MatrixXcd* W_pointer, int ress, int N1, int N2, double lambda, double y){
 
-	MatrixXcd identity2x2(2,2);
-
-	identity2x2 << MatrixXcd::Identity(2,2);
-
 	MatrixXcd W1(ress,N1);
 	MatrixXcd W2(ress,N2);
-	MatrixXcd W_aux1(W1.rows(), W1.cols() + W2.cols());
-	MatrixXcd W_aux2(2*W1.rows(), 2*(W1.cols() + W2.cols()));
 
-	for (int j = 1; j < ress + 1; j++){
-		for (int k = 1; k < N1 + 1; k++){
-			complex<double> aux(y*(sqrt(((2.0*lambda))/(M_PI*(ress + 1)))*sin(j*k*M_PI/(ress+1))),0);
-			W1(j-1,k-1) = aux;
+	W1.setZero(); W2.setZero();
+
+	for (int j=1; j < ress+1; j++ ){
+		for (int k=1; k < N1+1; k++){
+			if (j == k){
+				std::complex<double> aux(y*sqrt(lambda/M_PI), 0);
+				W1(j-1,k-1) = aux;
+			}
 		}
 	}
 
-	for (int j = 1; j < ress + 1; j++){
-		for (int k = 1; k < N2 + 1; k++){
-			complex<double> aux(y*(sqrt(((2.0*lambda))/(M_PI*(ress + 1)))*sin(j*(k+N1)*M_PI/(ress+1))),0);
-			W2(j-1,k-1) = aux;
+	for (int j=1; j < ress+1; j++ ){
+		for (int k=1; k < N2+1; k++){
+			if (j==k){
+				std::complex<double> aux(y*sqrt(lambda/M_PI), 0);
+				W2(j+N1-1,k-1) = aux;
+		
+			}
 		}
 	}
 
-	W_aux1 << W1, W2;
+	MatrixXcd W_aux(ress, (N1+N2));
+	W_aux.setZero();
+	W_aux << W1, W2;
 
-	for (int i = 1; i < W_aux1.rows() + 1; i++){
-		for (int j = 1; j < W_aux1.cols() + 1; j++){
-			W_aux2.block((i-1)*identity2x2.rows(), (j-1)*identity2x2.cols(), identity2x2.rows(), identity2x2.cols()) = W_aux1(i-1,j-1)*identity2x2;
-		}
-	}
+	MatrixXcd W(2*ress, 2*(N1+N2));
+	W.setZero();
 
-	MatrixXcd W = W_aux2;
+	W << Kronecker_Product(W_aux, MatrixXcd::Identity(2,2));
+
 	*W_pointer = W;
 }
 

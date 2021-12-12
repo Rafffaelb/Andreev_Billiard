@@ -23,36 +23,38 @@ AltZir_CI::~AltZir_CI() {}
 
 void AltZir_CI::Create_W(MatrixXcd* W_pointer, int ress, int N1, int N2, double lambda, double y){
 
-	MatrixXcd W1(ress, _electron_hole_deg * N1);
-	W1.setZero();
+	MatrixXcd W1(ress,N1);
+	MatrixXcd W2(ress,N2);
+
+	W1.setZero(); W2.setZero();
 
 	for (int j=1; j < ress+1; j++ ){
-		for (int k=1; k < 2*N1+1; k++){
-			std::complex<double> aux(y*(sqrt(((2.0*lambda))/(M_PI*(ress+1)))*sin(j*k*M_PI/(ress+1))), 0);
-			W1(j-1,k-1) = aux;
+		for (int k=1; k < N1+1; k++){
+			if (j == k){
+				std::complex<double> aux(y*sqrt(lambda/M_PI), 0);
+				W1(j-1,k-1) = aux;
+			}
 		}
 	}
 
-	MatrixXcd W2(ress, _electron_hole_deg * N2);
-	W2.setZero();
-
 	for (int j=1; j < ress+1; j++ ){
-		for (int k=1; k < 2*N2+1; k++){
-			std::complex<double> aux(y*(sqrt(((2.0*lambda))/(M_PI*(ress+1)))*sin(j*(k+2*N1)*M_PI/(ress+1))), 0);
-			W2(j-1,k-1) = aux;
+		for (int k=1; k < N2+1; k++){
+			if (j==k){
+				std::complex<double> aux(y*sqrt(lambda/M_PI), 0);
+				W2(j+N1-1,k-1) = aux;		
+			}
 		}
 	}
 
-	MatrixXcd W1_new(_electron_hole_deg * ress, _electron_hole_deg * N1);
-	W1_new.setZero();
-	W1_new << Implementing_Superconducting_Symmetry_W(W1, N1, ress, _electron_hole_deg);
+	MatrixXcd W_aux(ress, (N1+N2));
+	W_aux.setZero();
+	W_aux << W1, W2;
 
-	MatrixXcd W2_new(_electron_hole_deg * ress, _electron_hole_deg * N2);
-	W2_new.setZero();
-	W2_new << Implementing_Superconducting_Symmetry_W(W2, N2, ress, _electron_hole_deg);
+	MatrixXcd W(2*ress, 2*(N1+N2));
+	W.setZero();
 
-	MatrixXcd W(_electron_hole_deg * ress, _electron_hole_deg * (N1+N2));
-	W << W1_new, W2_new;
+	W << Kronecker_Product(W_aux, MatrixXcd::Identity(2,2));
+
 	*W_pointer = W;
 }
 
@@ -120,11 +122,11 @@ void AltZir_CI::Create_H(MatrixXcd* H_pointer, int ress, double _lambda){
 	H_1_aux.setZero(); H_3_aux.setZero();
 
 	for (int i = 1; i < ress + 1; i++){
-		H_1_aux(i-1,i-1) = (_lambda*(1/sqrt(ress)))*B(i-1,i-1);
-		H_3_aux(i-1,i-1) = (_lambda*(1/sqrt(ress)))*D(i-1,i-1);
+		H_1_aux(i-1,i-1) = (_lambda*(1/(2*sqrt(ress))))*B(i-1,i-1);
+		H_3_aux(i-1,i-1) = (_lambda*(1/(2*sqrt(ress))))*D(i-1,i-1);
 		for(int j = i + 1; j < ress + 1; j++){
-			H_1_aux(i-1,j-1) = (_lambda*(sqrt(2)/(sqrt(ress))))*B(j-1,i-1);
-			H_3_aux(i-1,j-1) = (_lambda*(sqrt(2)/(sqrt(ress))))*D(j-1,i-1);
+			H_1_aux(i-1,j-1) = (_lambda*(1/(sqrt(2*ress))))*B(j-1,i-1);
+			H_3_aux(i-1,j-1) = (_lambda*(1/(sqrt(2*ress))))*D(j-1,i-1);
 		}
 	}
 	
@@ -136,7 +138,7 @@ void AltZir_CI::Create_H(MatrixXcd* H_pointer, int ress, double _lambda){
 	MatrixXcd H(_electron_hole_deg * _spin_deg * ress, _electron_hole_deg * _spin_deg * ress);
 	H.setZero();
 
-	H << Kronecker_Product(paulimatrix_x, H_1) + Kronecker_Product(paulimatrix_z, H_3);
+	H << Kronecker_Product(H_1, paulimatrix_x) + Kronecker_Product(H_3, paulimatrix_z);
 	*H_pointer = H;	
 }
 
