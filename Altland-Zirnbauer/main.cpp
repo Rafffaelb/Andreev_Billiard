@@ -90,8 +90,13 @@ int main(int argc, char **argv){
 						if (strcmp(argv[j],"Gamma") == 0){
 					
 							cout << "\n ##### Running Class C Altland-Zirnbauer Ensemble (variable: Gamma) #### \n" << endl;
-
 							altzir_c.Run_Simulation_Conductance_Gamma();
+						}
+
+						if (strcmp(argv[j],"Concurrence") == 0){
+					
+							cout << "\n ##### Running Concurrence of Class C Altland-Zirnbauer Ensemble (variable: Gamma) #### \n" << endl;
+							altzir_c.Run_Simulation_Concurrence_Gamma();
 						}
 
 					}
@@ -118,6 +123,12 @@ int main(int argc, char **argv){
 					
 								cout << "\n ##### Running Class CI Altland-Zirnbauer Ensemble (variable: Gamma) #### \n" << endl;
 								altzir_ci.Run_Simulation_Conductance_Gamma();
+							}
+
+							if (strcmp(argv[j],"Concurrence") == 0){
+						
+								cout << "\n ##### Running Concurrence of Class CI Altland-Zirnbauer Ensemble (variable: Gamma) #### \n" << endl;
+								altzir_ci.Run_Simulation_Concurrence_Gamma();
 							}
 						}
 						altzir_ci.~AltZir_CI();	

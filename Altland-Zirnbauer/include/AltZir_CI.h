@@ -18,5 +18,6 @@ class AltZir_CI: public AltZir{
 
 		void Save_txt_files_Channels(MatrixXcd G, MatrixXcd P, int num_steps);
 		void Save_txt_files_Gamma(MatrixXcd G, MatrixXcd P, int num_steps, int N1);
+		void Save_txt_files_Concurrence_Gamma(MatrixXd Concurrence, MatrixXd Entanglement, int num_steps, int N1);
 };
 #endif

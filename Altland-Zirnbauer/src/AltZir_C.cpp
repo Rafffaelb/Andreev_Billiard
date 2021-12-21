@@ -217,3 +217,22 @@ void AltZir_C::Save_txt_files_Gamma(MatrixXcd G, MatrixXcd P, int num_steps, int
 		}
 	}	
 }
+
+void AltZir_C::Save_txt_files_Concurrence_Gamma(MatrixXd Concurrence, MatrixXd Entanglement, int num_steps, int N1){
+
+	std::ofstream output_Concurrence("Data_Analysis/Concurrence/Andreev_Concurrence_C_Gamma_N"+to_string(N1)+".txt");
+	std::ofstream output_Entanglement("Data_Analysis/Concurrence/Andreev_Entanglement_C_Gamma_N"+to_string(N1)+".txt");
+
+	for(int i = 0; i < num_steps; i++){
+		for (int j = 0; j < 21; j++){
+			if (j == 20){
+				output_Concurrence << Concurrence(i,j) << std::endl;
+				output_Entanglement << Entanglement(i,j) << std::endl;
+			}
+			else{
+				output_Concurrence << Concurrence(i,j) << "\t";
+				output_Entanglement << Entanglement(i,j) << "\t";
+			}
+		}
+	}	
+}
