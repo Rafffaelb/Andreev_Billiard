@@ -15,7 +15,7 @@ int main(int argc, char **argv){
 	int num_steps, spin_deg, electron_hole_deg;
 	
 	lambda = 0.5;
-	num_steps = 100000;
+	num_steps = 1000000;
 
 	for (int i = 1; i < argc; i++){
 
@@ -99,6 +99,11 @@ int main(int argc, char **argv){
 							altzir_c.Run_Simulation_Concurrence_Gamma();
 						}
 
+						if (strcmp(argv[j],"Bell_Parameter_Ress") == 0){
+					
+							cout << "\n ###### Running Bell Parameter of Class C Altland-Zirnbauer Ensemble (variable: Ress) ##### \n" << endl;
+							altzir_c.Run_Simulation_Bell_Parameter_Ress();
+						}
 					}
 					altzir_c.~AltZir_C();
 				}
@@ -130,7 +135,14 @@ int main(int argc, char **argv){
 								cout << "\n ##### Running Concurrence of Class CI Altland-Zirnbauer Ensemble (variable: Gamma) #### \n" << endl;
 								altzir_ci.Run_Simulation_Concurrence_Gamma();
 							}
+
+							if (strcmp(argv[j],"Bell_Parameter_Ress") == 0){
+					
+								cout << "\n ###### Running Bell Parameter of Class CI Altland-Zirnbauer Ensemble (variable: Ress) ##### \n" << endl;
+								altzir_ci.Run_Simulation_Bell_Parameter_Ress();
+							}
 						}
+
 						altzir_ci.~AltZir_CI();	
 					}
 				}

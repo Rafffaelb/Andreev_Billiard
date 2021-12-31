@@ -180,3 +180,5 @@ void AltZir_DIII::Save_txt_files_Gamma(MatrixXcd G, MatrixXcd P, int num_steps, 
 }
 
 void AltZir_DIII::Save_txt_files_Concurrence_Gamma(MatrixXd Concurrence, MatrixXd Entanglement, int num_steps, int N1) {}
+
+void AltZir_DIII::Save_txt_files_Bell_Parameter_Ress(MatrixXd Bell_Parameter_Ress, int num_steps) {}
