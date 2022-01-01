@@ -17,3 +17,8 @@ MatrixXcd Kronecker_Product(MatrixXcd A, MatrixXcd B){
 
 	return C;
 }
+
+MatrixXcd product_vector_matrix(Vector3d vector, MatrixXcd paulimatrix_x, MatrixXcd paulimatrix_y, MatrixXcd paulimatrix_z){
+
+	return vector[0]*paulimatrix_x + vector[1]*paulimatrix_y + vector[2]*paulimatrix_z;
+}

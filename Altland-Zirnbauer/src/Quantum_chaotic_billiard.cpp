@@ -135,6 +135,58 @@ void Quantum_chaotic_billiard::Calculate_Bell_Parameter(){
 	_Bell_Parameter_Dephase = 2*abs((paulimatrix_z*r*t.adjoint()*paulimatrix_z*t*r.adjoint()).trace())/((r.adjoint()*r*t.adjoint()*t).trace()).real();
 }
 
+void Quantum_chaotic_billiard::Calculate_Bell_Parameter_Fixed_Base(){
+
+	complex<double> complex_identity(0,1);
+	int chiral_deg = 2;
+	
+	MatrixXcd r, t, U_L(2,2), U_R(2,2), U_Lprime(2,2), U_Rprime(2,2), paulimatrix_x(2,2), paulimatrix_y(2,2), paulimatrix_z(2,2);
+	complex<double> C_a_b, C_a_bprime, C_aprime_b, C_aprime_bprime;
+
+	paulimatrix_x << 0, 1,
+		      	 1, 0;
+	
+	paulimatrix_y << 0, -complex_identity,
+		      	 complex_identity, 0;
+
+	paulimatrix_z << 1, 0,
+			 0, -1;
+
+	t = _S.block(chiral_deg * _N1, 0, chiral_deg * _N2, chiral_deg * _N1);
+	r = _S.block(0, 0, chiral_deg * _N1, chiral_deg * _N1);
+
+	MatrixXd T_y_theta(3,3);
+	
+	double degree = 0;
+	double theta = degree*PI/180;
+
+	T_y_theta << cos(theta), 0, sin(theta),
+	  	     0, 1, 0,
+	   	     -sin(theta), 0, cos(theta);	     
+
+	Vector3d Alice_vector(0, 0, 1);
+	Vector3d Alice_vector_prime(1, 0, 0);
+	Vector3d Bob_vector(-1/(sqrt(2)), 0, -1/(sqrt(2)));
+	Vector3d Bob_vector_prime(-1/(sqrt(2)), 0, 1/(sqrt(2)));
+	
+	Alice_vector = T_y_theta*Alice_vector;
+	Alice_vector_prime = T_y_theta*Alice_vector_prime;
+	Bob_vector = T_y_theta*Bob_vector;
+	Bob_vector_prime = T_y_theta*Bob_vector_prime;
+
+	U_L = product_vector_matrix(Alice_vector, paulimatrix_x, paulimatrix_y, paulimatrix_z);
+	U_Lprime = product_vector_matrix(Alice_vector_prime, paulimatrix_x, paulimatrix_y, paulimatrix_z);
+	U_R = product_vector_matrix(Bob_vector, paulimatrix_x, paulimatrix_y, paulimatrix_z);
+	U_Rprime = product_vector_matrix(Bob_vector_prime, paulimatrix_x, paulimatrix_y, paulimatrix_z);
+
+	C_a_b = Calculate_Noise_Fixed_Base(r, t, U_L, U_R);
+	C_a_bprime = Calculate_Noise_Fixed_Base(r, t, U_L, U_Rprime);
+	C_aprime_b = Calculate_Noise_Fixed_Base(r, t, U_Lprime, U_R);
+	C_aprime_bprime = Calculate_Noise_Fixed_Base(r, t, U_Lprime, U_Rprime);
+
+	_Bell_Parameter = abs(((C_a_b + C_aprime_b + C_a_bprime - C_aprime_bprime).real()));
+}
+
 double Quantum_chaotic_billiard::getBell_Parameter(){
 	return this -> _Bell_Parameter;
 }
@@ -208,3 +260,21 @@ complex<double> Calculate_Noise(MatrixXcd r, MatrixXcd t, MatrixXcd U_L, MatrixX
 	return C;
 }
 
+complex<double> Calculate_Noise_Fixed_Base(MatrixXcd r, MatrixXcd t, MatrixXcd U_L, MatrixXcd U_R){
+	
+	complex<double> C, Const_Norm;
+
+	MatrixXcd paulimatrix_z(2,2), a_dot_sigma(2,2), b_dot_sigma(2,2);
+
+	paulimatrix_z << 1, 0,
+			 0, -1;
+
+	a_dot_sigma = U_L;
+	b_dot_sigma = U_R;
+
+	Const_Norm = ((r*r.adjoint()).trace())*((t*t.adjoint()).trace())-(r*t.adjoint()*t*r.adjoint()).trace();
+
+	C = ((((a_dot_sigma)*r*r.adjoint()).trace())*(((b_dot_sigma)*t*t.adjoint()).trace()) - (((a_dot_sigma)*r*t.adjoint()*(b_dot_sigma)*t*r.adjoint()).trace()))/Const_Norm;
+
+	return C;
+}

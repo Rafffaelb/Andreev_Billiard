@@ -104,6 +104,18 @@ int main(int argc, char **argv){
 							cout << "\n ###### Running Bell Parameter of Class C Altland-Zirnbauer Ensemble (variable: Ress) ##### \n" << endl;
 							altzir_c.Run_Simulation_Bell_Parameter_Ress();
 						}
+
+						if (strcmp(argv[j],"Bell_Parameter_Gamma") == 0){
+					
+							cout << "\n ###### Running Bell Parameter of Class C Altland-Zirnbauer Ensemble (variable: Gamma) ##### \n" << endl;
+							altzir_c.Run_Simulation_Bell_Parameter_Gamma();
+						}
+
+						if (strcmp(argv[j],"Bell_Parameter_Fixed_Base") == 0){
+					
+							cout << "\n ###### Running Bell Parameter with Fixed Base of Class C Altland-Zirnbauer Ensemble ##### \n" << endl;
+							altzir_c.Run_Simulation_Bell_Parameter_Fixed_Base();
+						}
 					}
 					altzir_c.~AltZir_C();
 				}
@@ -140,6 +152,18 @@ int main(int argc, char **argv){
 					
 								cout << "\n ###### Running Bell Parameter of Class CI Altland-Zirnbauer Ensemble (variable: Ress) ##### \n" << endl;
 								altzir_ci.Run_Simulation_Bell_Parameter_Ress();
+							}
+
+							if (strcmp(argv[j],"Bell_Parameter_Gamma") == 0){
+					
+								cout << "\n ###### Running Bell Parameter of Class CI Altland-Zirnbauer Ensemble (variable: Gamma) ##### \n" << endl;
+								altzir_ci.Run_Simulation_Bell_Parameter_Gamma();
+							}
+
+							if (strcmp(argv[j],"Bell_Parameter_Fixed_Base") == 0){
+					
+								cout << "\n ###### Running Bell Parameter with Fixed Base of Class CI Altland-Zirnbauer Ensemble ##### \n" << endl;
+								altzir_ci.Run_Simulation_Bell_Parameter_Fixed_Base();
 							}
 						}
 
