@@ -14,12 +14,13 @@ void AltZir::Run_Simulation_Bell_Parameter_Ress(){
 	auto start = chrono::system_clock::now();
 
 	double Gamma, y;
-       	int ress, ress_idx, N1, N2, n;
+       	int ress, ress_idx, N1, N2, n, _num_steps;
 
 	Gamma = 1;
 	y = sqrt(double(1.0)/Gamma)*(1.0-sqrt(1.0-Gamma));
 
 	ress = 50;
+	_num_steps = 1000000;
 
 	N1 = 1;
 	N2 = N1;
@@ -64,7 +65,7 @@ void AltZir::Run_Simulation_Bell_Parameter_Ress(){
 
 			// Scattering Matrix //
 		
-			billiard_setup.Calculate_Smatrix();
+			billiard_setup.Calculate_Smatrix(0);
 
 			// Bell Parameter //
 		

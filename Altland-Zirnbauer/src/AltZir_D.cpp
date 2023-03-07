@@ -10,10 +10,9 @@
 
 using namespace std;
 
-AltZir_D::AltZir_D(double lambda, int num_steps, int spin_deg, int electron_hole_deg){
+AltZir_D::AltZir_D(double lambda, int spin_deg, int electron_hole_deg){
 
 	this -> _lambda = lambda;
-	this -> _num_steps = num_steps;
 	this -> _spin_deg = spin_deg;
 	this -> _electron_hole_deg = electron_hole_deg;
 }
@@ -156,3 +155,10 @@ void AltZir_D::Save_txt_files_Bell_Parameter_Ress(MatrixXd Bell_Parameter_Ress, 
 void AltZir_D::Save_txt_files_Bell_Parameter_Gamma(MatrixXd Bell_Parameter_Gamma, MatrixXd Bell_Parameter_Dephase_Gamma, int num_steps) {}
 
 void AltZir_D::Save_txt_files_Bell_Parameter_Fixed_Base(MatrixXd Bell_Parameter_Fixed_Base, int num_steps) {}
+
+void AltZir_D::Save_txt_files_Energy(MatrixXcd G, int num_steps, int N1) {}
+
+void AltZir_D::Save_txt_files_Energy_Gamma(MatrixXcd G, int num_steps, int N1, int gamma_idx) {}
+
+
+

@@ -14,9 +14,9 @@ void AltZir::Run_Simulation_Bell_Parameter_Fixed_Base(){
 	auto start = chrono::system_clock::now();
 
 	double Gamma, y;
-       	int ress, N1, N2, n, num_steps_aux;
+       	int ress, N1, N2, n, _num_steps;
 
-	num_steps_aux = 4000000;
+	_num_steps = 4000000;
 	ress = 100;
 
 	Gamma = 1;
@@ -35,7 +35,7 @@ void AltZir::Run_Simulation_Bell_Parameter_Fixed_Base(){
 
 	Create_ProjectionMatrices(C1_pointer, C2_pointer, N1, N2);
 	
-	MatrixXd Bell_Parameter_Fixed_Base(num_steps_aux, 2);
+	MatrixXd Bell_Parameter_Fixed_Base(_num_steps, 2);
 
 	Bell_Parameter_Fixed_Base.setZero();
 
@@ -48,7 +48,7 @@ void AltZir::Run_Simulation_Bell_Parameter_Fixed_Base(){
 	Create_W(W_pointer, ress, N1, N2, _lambda, y);
 		
 	#pragma omp parallel for shared(W, C1, C2)
-	for (int step = 1; step < num_steps_aux + 1; step++){
+	for (int step = 1; step < _num_steps + 1; step++){
 		
 		// Generate Hamiltonian Matrix //
 
@@ -64,7 +64,7 @@ void AltZir::Run_Simulation_Bell_Parameter_Fixed_Base(){
 
 		// Scattering Matrix //
 		
-		billiard_setup.Calculate_Smatrix();
+		billiard_setup.Calculate_Smatrix(0);
 
 		// Bell Parameter //
 	
@@ -81,7 +81,7 @@ void AltZir::Run_Simulation_Bell_Parameter_Fixed_Base(){
 	}
 	
 	//Save Concurrence matrix as txt files //
-	Save_txt_files_Bell_Parameter_Fixed_Base(Bell_Parameter_Fixed_Base, num_steps_aux);
+	Save_txt_files_Bell_Parameter_Fixed_Base(Bell_Parameter_Fixed_Base, _num_steps);
 		
 	auto end = chrono::system_clock::now();
 	auto elapsed =

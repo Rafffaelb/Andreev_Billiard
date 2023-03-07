@@ -11,10 +11,9 @@
 
 using namespace std;
 
-AltZir_CI::AltZir_CI(double lambda, int num_steps, int spin_deg, int electron_hole_deg){
+AltZir_CI::AltZir_CI(double lambda, int spin_deg, int electron_hole_deg){
 
 	this -> _lambda = lambda;
-	this -> _num_steps = num_steps;
 	this -> _spin_deg = spin_deg;
 	this -> _electron_hole_deg = electron_hole_deg;
 }
@@ -244,6 +243,38 @@ void AltZir_CI::Save_txt_files_Bell_Parameter_Fixed_Base(MatrixXd Bell_Parameter
 			}
 			else{
 				output_Bell_Parameter_Fixed_Base << Bell_Parameter_Fixed_Base(i,j) << "\t";
+			}
+		}
+	}
+}
+
+void AltZir_CI::Save_txt_files_Energy(MatrixXcd G, int num_steps, int N1){
+
+	std::ofstream output_G("Data_Analysis/Energy/Energy_Channel/Andreev_G_CI_Gamma_N"+to_string(N1)+".txt");
+
+	for(int i = 0; i < num_steps; i++){
+		for (int j = 0; j < 101; j++){
+			if (j == 100){
+				output_G << G(i,j).real() << std::endl;
+			}
+			else{
+				output_G << G(i,j).real() << "\t";
+			}
+		}
+	}
+}
+
+void AltZir_CI::Save_txt_files_Energy_Gamma(MatrixXcd G, int num_steps, int N1, int gamma_idx){
+
+	std::ofstream output_G("Data_Analysis/Energy/Energy_Gamma/Andreev_G_CI_Gamma_N"+to_string(N1)+"_"+to_string(gamma_idx)+".txt");
+
+	for(int i = 0; i < num_steps; i++){
+		for (int j = 0; j < 101; j++){
+			if (j == 100){
+				output_G << G(i,j).real() << std::endl;
+			}
+			else{
+				output_G << G(i,j).real() << "\t";
 			}
 		}
 	}

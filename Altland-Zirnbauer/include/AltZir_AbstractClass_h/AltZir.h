@@ -8,7 +8,6 @@ class AltZir{
 
 	protected:
 
-		int _num_steps;
 		int _spin_deg;
 		int _electron_hole_deg;
 		double _lambda;
@@ -27,6 +26,8 @@ class AltZir{
 		void Run_Simulation_Bell_Parameter_Ress();
 		void Run_Simulation_Bell_Parameter_Gamma();
 		void Run_Simulation_Bell_Parameter_Fixed_Base();
+		void Run_Simulation_Conductance_Energy();
+		void Run_Simulation_Conductance_Energy_Gamma();
 
 		virtual void Create_H(MatrixXcd* H_pointer, int _ress, double _lambda) = 0;
 
@@ -38,6 +39,9 @@ class AltZir{
 		virtual void Save_txt_files_Bell_Parameter_Ress(MatrixXd Bell_Parameter_Ress, int num_steps) = 0;
 		virtual void Save_txt_files_Bell_Parameter_Gamma(MatrixXd Bell_Parameter_Gamma, MatrixXd Bell_Parameter_Dephase_Gamma, int num_steps) = 0;
 		virtual void Save_txt_files_Bell_Parameter_Fixed_Base(MatrixXd Bell_Parameter_Fixed_Base, int num_steps) = 0;
+		virtual void Save_txt_files_Energy(MatrixXcd G, int num_steps, int N1) = 0;
+		virtual void Save_txt_files_Energy_Gamma(MatrixXcd G, int num_steps, int N1, int gamma_idx) = 0;
+
 };
 
 #endif

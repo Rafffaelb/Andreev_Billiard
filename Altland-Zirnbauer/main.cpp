@@ -15,7 +15,6 @@ int main(int argc, char **argv){
 	int num_steps, spin_deg, electron_hole_deg;
 	
 	lambda = 0.5;
-	num_steps = 100000;
 
 	for (int i = 1; i < argc; i++){
 
@@ -24,7 +23,7 @@ int main(int argc, char **argv){
 			electron_hole_deg = 1;		
 			spin_deg = 1;
 
-			AltZir_D altzir_d(lambda, num_steps, spin_deg, electron_hole_deg);
+			AltZir_D altzir_d(lambda, spin_deg, electron_hole_deg);
 		
 			for (int j = 1; j < argc; j++){
 				
@@ -50,7 +49,7 @@ int main(int argc, char **argv){
 				electron_hole_deg = 1;
 				spin_deg = 2;
 
-				AltZir_DIII altzir_diii(lambda, num_steps, spin_deg, electron_hole_deg);
+				AltZir_DIII altzir_diii(lambda, spin_deg, electron_hole_deg);
 
 				for (int j = 1; j < argc; j++){
 				
@@ -77,7 +76,7 @@ int main(int argc, char **argv){
 					electron_hole_deg = 2;
 					spin_deg = 1;
 
-					AltZir_C altzir_c(lambda, num_steps, spin_deg, electron_hole_deg);
+					AltZir_C altzir_c(lambda, spin_deg, electron_hole_deg);
 
 					for (int j = 1; j < argc; j++){
 				
@@ -116,6 +115,21 @@ int main(int argc, char **argv){
 							cout << "\n ###### Running Bell Parameter with Fixed Base of Class C Altland-Zirnbauer Ensemble ##### \n" << endl;
 							altzir_c.Run_Simulation_Bell_Parameter_Fixed_Base();
 						}
+
+						if (strcmp(argv[j],"Energy") == 0){
+
+							cout << "\n ##### Running Class C Altland-Zirnbauer Ensemble (variable: Energy) ###### \n" << endl;
+
+							altzir_c.Run_Simulation_Conductance_Energy();
+						}
+
+						if (strcmp(argv[j],"Energy_Gamma") == 0){
+
+							cout << "\n ##### Running Class C Altland-Zirnbauer Ensemble (variable: Energy, Gamma) ###### \n" << endl;
+							altzir_c.Run_Simulation_Conductance_Energy_Gamma();
+						}
+
+
 					}
 					altzir_c.~AltZir_C();
 				}
@@ -126,7 +140,7 @@ int main(int argc, char **argv){
 						electron_hole_deg = 2;
 						spin_deg = 1;
 
-						AltZir_CI altzir_ci(lambda, num_steps, spin_deg, electron_hole_deg);
+						AltZir_CI altzir_ci(lambda, spin_deg, electron_hole_deg);
 
 						for (int j = 1; j < argc; j++){
 				
@@ -165,6 +179,20 @@ int main(int argc, char **argv){
 								cout << "\n ###### Running Bell Parameter with Fixed Base of Class CI Altland-Zirnbauer Ensemble ##### \n" << endl;
 								altzir_ci.Run_Simulation_Bell_Parameter_Fixed_Base();
 							}
+
+							if (strcmp(argv[j],"Energy") == 0){
+
+								cout << "\n ##### Running Class CI Altland-Zirnbauer Ensemble (variable: Energy) ###### \n" << endl;
+								altzir_ci.Run_Simulation_Conductance_Energy();
+							}
+
+							if (strcmp(argv[j],"Energy_Gamma") == 0){
+
+								cout << "\n ##### Running Class CI Altland-Zirnbauer Ensemble (variable: Energy, Gamma) ###### \n" << endl;
+								altzir_ci.Run_Simulation_Conductance_Energy_Gamma();
+							}
+
+
 						}
 
 						altzir_ci.~AltZir_CI();	

@@ -2,35 +2,36 @@
 #include <chrono>
 #include "../../include/AltZir_AbstractClass_h/AltZir.h"
 #include "../../include/Quantum_chaotic_billiard.h"
-#include "../../include/AltZir_AbstractClass_h/Run_Simulation_Conductance_Channels.h"
+#include "../../include/AltZir_AbstractClass_h/Run_Simulation_Conductance_Energy.h"
 #include <eigen3/Eigen/Dense>
 #include <omp.h>
 
 using namespace std;
 using namespace Eigen;
 
-void AltZir::Run_Simulation_Conductance_Channels(){
+void AltZir::Run_Simulation_Conductance_Energy(){
 
 	auto start = chrono::system_clock::now();
 
-	double Gamma, y, V;
-       	int ress, _num_steps;
+	double Gamma, Delta, y, V, Energy, small_gamma;
+       	int N1, N2, n, _num_steps;
 
-	ress = 100;
-	_num_steps = 100000;
+	Delta = 0.01;
 	Gamma = 1;
-	y = sqrt(1.0/Gamma)*(1.0-sqrt(1.0-Gamma));
+	y = sqrt(double(1.0)/Gamma)*(1.0-sqrt(1.0-Gamma));
+	int ress = 150;
+	_num_steps = 5000; 
 
-	MatrixXcd G(_num_steps, 10);
-	MatrixXcd P(_num_steps, 10);
+	for (int i = 1; i < 16; i++){
 
-	G.setZero();
-	P.setZero();
+		MatrixXcd G(_num_steps, 101);
 
-	for (int N1 = 1; N1 < 11; N1++){
-		
-		int N2 = N1;
-		int n = N1 + N2;
+		G.setZero();
+
+		N1 = i;
+
+		N2 = N1;
+		n = N1 + N2;
 
 		// Create W Matrices //
 
@@ -53,9 +54,8 @@ void AltZir::Run_Simulation_Conductance_Channels(){
 
 		Create_ProjectionMatrices(C1_pointer, C2_pointer, N1, N2);
 		
-		#pragma omp parallel for shared(W, C1, C2)
 		for (int step = 1; step < _num_steps + 1; step++){
-			
+		
 			// Generate Hamiltonian Matrix //
 
 			MatrixXcd H(_electron_hole_deg * _spin_deg * ress, _electron_hole_deg * _spin_deg * ress);
@@ -63,30 +63,35 @@ void AltZir::Run_Simulation_Conductance_Channels(){
 			MatrixXcd* H_pointer = &H;
 
 			Create_H(H_pointer, ress, _lambda);
-	
+
 			// Create billiard setup //
-			
+
 			Quantum_chaotic_billiard billiard_setup(H, W, C1, C2, N1, N2, _electron_hole_deg);
 
-			// Scattering Matrix //
+			small_gamma = (N1*Gamma*Delta/(4*M_PI));
 
-			billiard_setup.Calculate_Smatrix(0);
+			#pragma omp parallel for shared(H, W, C1, C2) firstprivate(billiard_setup)
+			for (int energy_idx = 1; energy_idx < 102; energy_idx++){
 
-			// Conductance (G) and Power Shot Noise (P) //
-			
-			billiard_setup.Calculate_G_and_P();
+				Energy = small_gamma*((double)energy_idx-51);
 
-			G(step-1, N1-1) = billiard_setup.getG();
-			P(step-1, N1-1) = billiard_setup.getP();
+				// Scattering Matrix //
+
+				billiard_setup.Calculate_Smatrix(Energy);
+
+				// Conductance (G) and Power Shot Noise (P) //
+		
+				billiard_setup.Calculate_G_and_P();
+
+				G(step-1, energy_idx-1) = billiard_setup.getG();
+			}
 
 			if (step % _num_steps == 0){
-				std::cout << "\nCurrent number of steps: " << step << "| Current number of open channels (N): " << N1 << std::endl;
+				std::cout << "\nCurrent number of steps: " << step << "| Current number of open Channel N: " << N1 <<  std::endl;
 			}
 		}
-
-		// Save G and P matrices as txt files //
-		
-		Save_txt_files_Channels(G, P, _num_steps);
+		//Save G matrix as txt files //
+		Save_txt_files_Energy(G, _num_steps, N1);
 
 	}
 

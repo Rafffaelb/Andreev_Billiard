@@ -14,12 +14,14 @@ void AltZir::Run_Simulation_Concurrence_Gamma(){
 	auto start = chrono::system_clock::now();
 
 	double Gamma, y, V;
-       	int ress, N1, N2, n;
+       	int ress, N1, N2, n, _num_steps;
 
 	ress = 100;
+	_num_steps = 2000000;
+
 	V = _lambda*_lambda/ress;
 
-	for (int i = 1; i < 3; i++){
+	for (int i = 2; i < 3; i++){
 
 		N1 = i;
 
@@ -78,7 +80,7 @@ void AltZir::Run_Simulation_Concurrence_Gamma(){
 
 				// Scattering Matrix //
 		
-				billiard_setup.Calculate_Smatrix();
+				billiard_setup.Calculate_Smatrix(0);
 
 				// Concurrence //
 		
