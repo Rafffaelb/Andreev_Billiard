@@ -16,13 +16,13 @@ void AltZir::Run_Simulation_Conductance_Energy_Gamma(){
         double Gamma, Delta, y, Energy, small_gamma;
         int N1, N2, n, ress, _num_steps;
 
-        _num_steps = 5000;
+        _num_steps = 30000;
 
         Eigen::VectorXf N_vector(6); N_vector << 1, 2, 5, 10, 15, 30;
         Eigen::VectorXf ress_vector(6); ress_vector << 100, 100, 100, 100, 150, 300;
         Eigen::VectorXf Delta_vector(6); Delta_vector << 0.01, 0.01, 0.01, 0.01, 0.0066, 0.0033;
 
-        for (int i = 0; i < 3; i++){
+        for (int i = 0; i < 6; i++){
 
                 MatrixXcd G(_num_steps, 101);
                 G.setZero();
